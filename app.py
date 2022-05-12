@@ -111,10 +111,17 @@ def detail(post_num):
 
     # post_num에 해당하는 comment 정보 찾음
     country_comment = list(db.comments.find({'post_num': int(post_num)}, {'_id': False}))
-    print(country_comment)
-
+    # print(country_comment)
     comments = list(db.comments.find({},{'_id':False}))
-    return render_template("detail.html", country_comment=country_comment, country=country)
+
+    try:
+        token_receive = request.cookies.get('mytoken')
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]},{'_id':False})
+        return render_template("detail.html", country_comment=country_comment, country=country, user_info=user_info)
+
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return render_template("detail.html", country_comment=country_comment, country=country)
 
 
 
@@ -173,14 +180,24 @@ def main_info():
 def save_comment():
     # (to-do) id 변수로 가져오고 db에 넣어야함
 
-    # id_receive = request.form["id_give"]
-    comment_receive = request.form["comment_give"]
-    post_num_receive = request.form["post_num_give"]
+    token_receive = request.cookies.get('mytoken')
+    print("토큰정보")
+    print(token_receive)
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
+        comment_receive = request.form["comment_give"]
+        post_num_receive = request.form["post_num_give"]
 
-    # doc = {"index": index_receive, "id":id_receive, "comment": comment_receive}
-    doc = {"post_num" : int(post_num_receive) ,"comment": comment_receive}
-    db.comments.insert_one(doc)
-    return jsonify({'result': 'success', 'msg': '커멘트 저장'})
+        doc = {
+            "post_num": int(post_num_receive),
+            "comment": comment_receive,
+            "username": user_info["username"]
+        }
+        db.comments.insert_one(doc)
+        return jsonify({'result': 'success', 'msg': '커멘트 저장'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("login"))
 
 
 @app.route('/')
