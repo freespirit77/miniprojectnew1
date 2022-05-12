@@ -1,0 +1,41 @@
+body {
+    min-height: 100vh;
+    margin: 0px;
+    padding: 0px;
+    font-family: sans-serif;
+    background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://www.10wallpaper.com/wallpaper/1366x768/1609/Netherlands_City_Rivers_Night-Europe_Travel_Pphotography_Wallpaper_1366x768.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+
+.button.is-sparta {
+    background-color: #b46cf6;
+    opacity: 0.7;
+    border-color: transparent;
+    color: #fff !important;
+}
+
+.button.is-sparta.is-outlined {
+    background-color: transparent;
+    border-color: #b46cf6;
+    color: #b46cf6 !important;
+}
+
+.help {
+    color: gray;
+}
+
+.media-content h1 {
+    text-align: center;
+}
+
+.section .container {
+    width:400px;
+    height:400px;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin-left:-200px;
+    margin-top:-200px;
+}
