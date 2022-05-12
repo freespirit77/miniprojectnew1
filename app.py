@@ -7,11 +7,12 @@ app = Flask(__name__)
 
 # mongodb connect
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://test:test@cluster0.mai7p.mongodb.net/Cluster0?retryWrites=true&w=majority')
-db = client.dbsparta
 
-# import certifi
-# ca = certifi.where()
+import certifi
+ca = certifi.where()
+
+client = MongoClient('mongodb+srv://test:test@cluster0.mai7p.mongodb.net/Cluster0?retryWrites=true&w=majority', tlsCAFile=ca)
+db = client.dbsparta
 
 # 현욱님 DB
 # client2 = MongoClient('mongodb+srv://test:sparta@cluster0.arjwt.mongodb.net/Cluster0?retryWrites=true&w=majority')
@@ -110,4 +111,4 @@ def save_comment():
     return jsonify({'result': 'success', 'msg': '커멘트 저장'})
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    app.run('0.0.0.0', port=5500, debug=True)
