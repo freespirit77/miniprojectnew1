@@ -30,6 +30,8 @@ function sign_in() {
         success: function (response) {
             if (response['result'] == 'success') {
                 $.cookie('mytoken', response['token'], {path: '/'});
+                // window.location.href="/"
+                // 이전화면으로 돌아가기
                 window.location.href="/"
             } else {
                 alert(response['msg'])
