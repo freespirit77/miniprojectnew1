@@ -117,6 +117,8 @@ def detail(post_num):
     comments = list(db.comments.find({},{'_id':False}))
     return render_template("detail.html", country_comment=country_comment, country=country)
 
+
+
 # 메인화면에서 나라, 이미지, desc 등 정보 크롤링, 저장
 @app.route("/info", methods=["POST"])
 def main_info():
@@ -166,6 +168,8 @@ def main_info():
 
     return jsonify({'msg': 'main화면정보 저장완료'})
 
+
+
 @app.route('/detail/save_comment', methods=['POST'])
 def save_comment():
     # (to-do) id 변수로 가져오고 db에 넣어야함
@@ -178,6 +182,17 @@ def save_comment():
     doc = {"post_num" : int(post_num_receive) ,"comment": comment_receive}
     db.comments.insert_one(doc)
     return jsonify({'result': 'success', 'msg': '커멘트 저장'})
+
+
+@app.route('/')
+def log_out():
+    token_receive = request.cookies.get('mytoken')
+    if token_receive is not None:
+        login_status = 1
+        return render_template('index.html', login=login_status)
+    else:
+        login_status = 0
+        return render_template('index.html', login=login_status)
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5500, debug=True)
