@@ -1,0 +1,120 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <title>U.Luv</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/index.css">
+    <!-- Font Awesome CSS -->
+    <script src="https://kit.fontawesome.com/8f4978e361.js" crossorigin="anonymous"></script>
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
+    <script>
+        $(document).ready(function () {
+            main_info();
+        });
+
+        function main_info() {
+            $.ajax({
+                type: 'POST',
+                url: '/info',
+                data: {},
+                success: function (response) {
+                    console.log(response['msg'])
+                }
+            });
+        }
+
+        function logout() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃 완료!');
+            window.location.href = "/";
+        }
+
+        //
+        // function listing() {
+        //     $('#cards-box').empty()
+        //     $.ajax({
+        //         type: 'GET',
+        //         url: '/countrys',
+        //         data: {},
+        //         success: function (response) {
+        //            let rows = response['countrys']
+        //             for (let i = 0; i < rows.length; i ++){
+        //                 let title = rows[i]['title']
+        //                 let image_link= rows[i]['image_link']
+        //                 let temp_html = `  <div class="col">
+        //                                     <div class="card">
+        //                                       <img onclick="window.location.href='/detail/post_num'" src="${image_link}" class="card-img-top" alt="...">
+        //                                       <div class="card-body">
+        //                                         <h5 class="card-title">${title}</h5>
+        //                                         <p class="card-text">코멘트</p>
+        //                                       </div>
+        //                                     </div>
+        //                                   </div>`
+        //                 $('#cards-box').append(temp_html)
+        //             }
+        //         }
+        //     })
+        // }
+        </script>
+</head>
+<body>
+ <nav class="nav">
+            <ul class="clearfix">
+                {% if login_status == 0 %}
+                <li><a href="/login">Login</a></li>
+                {% elif login_status == 1 %}
+                <li><a onclick="logout()">Logout</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+<div class="mytitle">
+    <h1>U.Luv</h1>
+    <div class="mainMP4">
+        <video muted autoplay loop>
+            <source src="/static/vllo2.mp4" type="video/mp4">
+        </video>
+    </div>
+</div>
+<div class="main_text">
+    <h2>함께라면 더 즐거울<br>여행, U.Luv</h2>
+    <p>소중한 것을 깨닫는 장소는 언제나<br>컴퓨터 앞이 아니라 파란 하늘 아래였다.<br>-다카하시 </p>
+</div>
+<div class="mycards">
+    <div class="row row-cols-1 row-cols-md-3 g-4" id="cards-box">
+        {% for country in countrys %}
+            <div class="col">
+                <div class="card">
+                    <img onclick="window.location.href='/detail/{{ country.post_num }}'" src="{{ country.image_link }}"
+                         class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ country.title }}</h5>
+                        <p>{{ country.short_desc }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                <strong>항해99 7기</strong> | 14조: 길수진, 김숙영, 문수찬, 정현욱
+            </p>
+        </div>
+    </footer>
+</div>
+</body>
+</html>
